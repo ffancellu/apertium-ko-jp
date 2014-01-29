@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary>
+
+<alphabet></alphabet>
+
+<sdefs>
+	<!-- verbs -->
+	<sdef n="vblex"/>
+	<sdef n="pol"/><!-- polite -->
+	<sdef n="pres"/>
+	<!-- nouns -->
+	<sdef n="n"/>
+<!-- 	<sdef n="pl"/> -->
+	<sdef n="acc"/>
+</sdefs>
+
+<pardefs>
+	<pardef n="jip__n">
+		<e><p><l/><r><s n="n"/></r></p></e>
+		<e><p><l>eul</l><r><s n="n"/><s n="acc"/></r></p></e>
+		<!-- <e><p><l>deul</l><r><s n="n"/><s n="pl"/></r></p></e> -->
+	</pardef>
+	<pardef n="sa/da__vblex">
+		<e><p><l>yo</l><r>da<s n="vblex"/><s n="pres"/><s n="pol"/></r></p></e>
+	</pardef>
+	<pardef n="ar/da__vblex">
+		<e><p><l>ayo</l><r>da<s n="vblex"/><s n="pres"/><s n="pol"/></r></p></e>
+	</pardef>
+</pardefs>
+
+<section id="main" type="standard">
+	<e lm="jip"><i>jip</i><par n="jip__n"/></e>
+	<e lm="saram"><i>saram</i><par n="jip__n"/></e>
+	<e lm="sada"><i>sa</i><par n="sa/da__vblex"/></e>
+	<e lm="arda"><i>ar</i><par n="ar/da__vblex"/></e>
+</section>
+</dictionary>
+

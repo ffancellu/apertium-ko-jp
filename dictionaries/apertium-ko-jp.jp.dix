@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary>
+
+<sdefs>
+	<!-- verbs -->
+	<sdef n="vblex"/>
+	<sdef n="pol"/><!-- polite -->
+	<sdef n="pres"/>
+	<!-- nouns -->
+	<sdef n="n"/>
+	<sdef n="acc"/>
+	<!-- <sdef n="pl"/> -->
+</sdefs>
+
+<pardefs>
+	<pardef n="ひと__n">
+		<e><p><l/><r><s n="n"/></r></p></e>
+		<e><p><l>を</l><r><s n="n"/><s n="acc"/></r></p></e>
+		<!-- <e><p><l>たち</l><r><s n="n"/><s n="pl"/></r></p></e> -->
+	</pardef>
+	<pardef n="わか/る__vblex">
+		<e><p><l>ります</l><r><s n="vblex"/><s n="pres"/><s n="pol"/></r></p></e>
+	</pardef>
+	<pardef n="か/う__vblex">
+		<e><p><l>います</l><r><s n="vblex"/><s n="pres"/><s n="pol"/></r></p></e>
+	</pardef>
+</pardefs>
+
+<section id="main" type="standard">
+	<e lm="ひと"><i>ひと</i><par n="ひと__n"/></e>
+	<e lm="うち"><i>うち</i><par n="ひと__n"/></e>
+	<e lm="かう"><i>か</i><par n="か/う__vblex"/></e>
+	<e lm="わかる"><i>わか</i><par n="わか/る__vblex"/></e>
+</section>
+</dictionary>
