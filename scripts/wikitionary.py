@@ -7,6 +7,7 @@
 from bs4 import BeautifulSoup
 import re
 import urllib,urllib2
+from pymongo import MongoClient
 
 
 class Wikictionary:
@@ -14,7 +15,8 @@ class Wikictionary:
     def __init__(self):
 
         self.url = "http://en.wiktionary.org/w/api.php"
-        self.JSONObject = None
+        client = MongoClient('localhost', 27017)
+        self.db = client.apertium_database
 
         
         # {'english_word':
@@ -26,6 +28,7 @@ class Wikictionary:
         #          'other': 'b'}
         #          }
         #         }
+        #         
 
     def lookup_word(self,word):
 
@@ -60,32 +63,48 @@ class Wikictionary:
         dnw = revision.index('\n\n')
         revision = revision[:dnw]
 
+        trans_lines = dict()
+
         for lang in args:
 
-            trans_lines = dict()
+            lang_dict = trans_lines.setdefault(lang,{})        
 
             trans = re.findall('\* ' + lang + r': (.+)',revision)[0]
 
             #TODO: just takes into consideration the 1st lexical translation
             trans = trans.split('}}, {{')[0]
 
-            trans_lines[lang] = {
-                'translation': trans.split('|')[2],
-                'other' : trans.split('|')[3]}
+            translation = trans.split('|')[2]
+            lang_dict['translation'] = translation
+                
+            for _slice in trans.split('|')[3:]:
 
-        print trans_lines
+                print _slice
+
+                if 'alt=' in _slice:
+                    lang_dict['alt'] = _slice[_slice.index('=')+1:]
+                    
+                if 'tr=' in _slice:
+                    lang_dict['tr'] = _slice[_slice.index('=')+1:]
+                    
+
         return trans_lines
         
-    # def extract_trans(self,trans_lines):
+    def mongoDump(self,word,dictionary):
 
-    #     translations = map(lambda x: x.split('|')[2],trans_lines)
-    #     translit = map(lambda x: x.split('|')[3],trans_lines)
+        complete_dict = {"word" : word, "translations": dictionary}
+        bi_dict = self.db.bi_dict
+        _id = bi_dict.insert(complete_dict)
+        print _id
 
-    #     return translations, translit
+
 
 if __name__=="__main__":
 
     wk = Wikictionary()
-    revision = wk.lookup_word('abbreviate')
+    word = 'abbreviate'
+    revision = wk.lookup_word(word)
     trans_lines = wk.isolate_trans(revision,'Korean','Japanese')
-    wk.extract_trans(trans_lines)
+    wk.mongoDump(word,trans_lines)
+
+    #wk.extract_trans(trans_lines)
