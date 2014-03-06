@@ -7,8 +7,6 @@
 from bs4 import BeautifulSoup
 import re
 import urllib,urllib2
-from pymongo import MongoClient
-from nltk import pos_tag
 
 
 class Wikictionary:
@@ -16,8 +14,7 @@ class Wikictionary:
     def __init__(self):
 
         self.url = "http://en.wiktionary.org/w/api.php"
-        client = MongoClient('localhost', 27017)
-        self.db = client.apertium_database
+        
 
         
         # {'english_word':
@@ -34,8 +31,6 @@ class Wikictionary:
     def lookup_word(self,word):
 
         """Function to look up word in wikipedia to get inter-language links"""
-
-        print repr(word)
 
         forms = {
             'format': 'xml',
@@ -55,7 +50,6 @@ class Wikictionary:
 
         revision = soup.rev.string
 
-        print revision
 
         return revision
 
@@ -82,7 +76,7 @@ class Wikictionary:
                 
             for _slice in trans.split('|')[3:]:
 
-                print _slice
+                # print _slice
 
                 if 'alt=' in _slice:
                     lang_dict['alt'] = _slice[_slice.index('=')+1:]
@@ -93,13 +87,6 @@ class Wikictionary:
 
         return trans_lines
 
-    def mongoDump(self,word,dictionary):
-
-        complete_dict = {"word" : word, "translations": dictionary}
-        bi_dict = self.db.bi_dict
-        _id = bi_dict.insert(complete_dict)
-        print _id
-
 
 
 if __name__=="__main__":
@@ -108,8 +95,5 @@ if __name__=="__main__":
     word = 'go'
     revision = wk.lookup_word(word)
     trans_lines = wk.isolate_trans(revision,'Korean','Japanese')
-    pos = wk.pos_tagging(word)
-    print pos
-    #wk.mongoDump(word,trans_lines)
-
-    #wk.extract_trans(trans_lines)
+    #pos = wk.pos_tagging(word)
+    print trans_lines
