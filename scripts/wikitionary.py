@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 import re
 import urllib,urllib2
 from pymongo import MongoClient
+from nltk import pos_tag
 
 
 class Wikictionary:
@@ -54,6 +55,8 @@ class Wikictionary:
 
         revision = soup.rev.string
 
+        print revision
+
         return revision
 
     def isolate_trans(self,revision,*args):
@@ -89,7 +92,7 @@ class Wikictionary:
                     
 
         return trans_lines
-        
+
     def mongoDump(self,word,dictionary):
 
         complete_dict = {"word" : word, "translations": dictionary}
@@ -102,9 +105,11 @@ class Wikictionary:
 if __name__=="__main__":
 
     wk = Wikictionary()
-    word = 'abbreviate'
+    word = 'go'
     revision = wk.lookup_word(word)
     trans_lines = wk.isolate_trans(revision,'Korean','Japanese')
-    wk.mongoDump(word,trans_lines)
+    pos = wk.pos_tagging(word)
+    print pos
+    #wk.mongoDump(word,trans_lines)
 
     #wk.extract_trans(trans_lines)
